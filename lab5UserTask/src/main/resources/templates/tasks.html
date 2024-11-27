@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Tasks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<nav class="bg-blue-600 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-white text-2xl font-bold">TaskApp</a>
+        <div>
+            <a th:href="@{/logout}" class="text-white">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mx-auto mt-10">
+    <div class="bg-white p-8 rounded shadow-md">
+        <h1 class="text-2xl font-bold mb-6">Your Tasks</h1>
+        <a th:href="@{/tasks/add}" class="bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block">Add Task</a>
+        <table class="min-w-full bg-white">
+            <thead>
+            <tr>
+                <th class="py-2">Title</th>
+                <th class="py-2">Description</th>
+                <th class="py-2">Due Date</th>
+                <th class="py-2">Status</th>
+                <th class="py-2">Priority</th>
+                <th class="py-2">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${tasks}">
+                <td class="border px-4 py-2" th:text="${task.title}"></td>
+                <td class="border px-4 py-2" th:text="${task.description}"></td>
+                <td class="border px-4 py-2" th:text="${task.dueDate}"></td>
+                <td class="border px-4 py-2" th:text="${task.status}"></td>
+                <td class="border px-4 py-2" th:text="${task.priority}"></td>
+                <td class="border px-4 py-2">
+                    <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</a>
+                    <a th:href="@{/tasks/delete/{id}(id=${task.id})}" class="bg-red-500 text-white px-2 py-1 rounded">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

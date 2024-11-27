@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form</title>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/signup.js" defer></script>
+</head>
+<body>
+<section>
+    <form id="signup-form">
+        <h1>Sign Up</h1>
+        <div class="inputbox">
+            <ion-icon name="person-outline"></ion-icon>
+            <input type="text" id="username" name="username" required>
+            <label for="username">Name</label>
+        </div>
+        <div class="inputbox">
+            <ion-icon name="mail-outline"></ion-icon>
+            <input type="email" id="email" name="email" required>
+            <label for="email">Email</label>
+        </div>
+        <div class="inputbox">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <input type="password" id="password" name="password" required>
+            <label for="password">Password</label>
+        </div>
+        <div class="inputbox">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <input type="password" id="passwordcon" name="passwordcon" required>
+            <label for="passwordcon">Confirm Password</label>
+        </div>
+        <button id="submit" type="button">Sign Up</button>
+        <div id="error-message" style="color: red; display: none;">Passwords do not match.</div>
+        <div class="register">
+            <p>Already have an account? <a href="">Log In</a></p>
+        </div>
+    </form>
+</section>
+
+<script>
+    const submitButton = document.getElementById("submit");
+    submitButton.addEventListener("click", () => {
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("passwordcon").value;
+        const errorMessage = document.getElementById("error-message");
+
+        if (password !== confirmPassword) {
+            errorMessage.style.display = "block";
+            errorMessage.textContent = "Passwords do not match.";
+            return;
+        }
+
+        errorMessage.style.display = "none";
+
+        const data = {
+            username,
+            email,
+            password,
+        };
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Signing Up...";
+
+        fetch("/req/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("Signup successful!");
+                    window.location.href = "/req/login";
+                } else {
+                    return response.json();
+                }
+            })
+            .then((errorData) => {
+                if (errorData) {
+                    alert(errorData.message || "Signup failed.");
+                }
+            })
+            .catch((error) => {
+                alert("An error occurred. Please try again.");
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = "Sign Up";
+            });
+    });
+</script>
+</body>
+</html>
